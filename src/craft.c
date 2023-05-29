@@ -23,8 +23,8 @@ CAM_t* gen_cam() {
     cam->cam.generationDeltaTime =  its_ts_get() % 65536;
     cam->cam.camParameters.basicContainer.stationType = rand() % 16;
     cam->cam.camParameters.basicContainer.referencePosition.positionConfidenceEllipse.semiMajorConfidence = rand_range(0, 4095);
-    cam->cam.camParameters.basicContainer.referencePosition.positionConfidenceEllipse.semiMajorOrientation = rand_range(0, 4095);
-    cam->cam.camParameters.basicContainer.referencePosition.positionConfidenceEllipse.semiMinorConfidence = rand_range(0, 3601);
+    cam->cam.camParameters.basicContainer.referencePosition.positionConfidenceEllipse.semiMinorConfidence = rand_range(0, 4095);
+    cam->cam.camParameters.basicContainer.referencePosition.positionConfidenceEllipse.semiMajorOrientation = rand_range(0, 3601);
 
     switch (cam->cam.camParameters.highFrequencyContainer.present) {
         case HighFrequencyContainer_PR_basicVehicleContainerHighFrequency:
@@ -173,8 +173,8 @@ int encode(void* msg, asn_TYPE_descriptor_t* desc, enum asn_transfer_syntax ats,
     return enc.encoded;
 }
 
-char* request(char* msg_type, char* encoding_type) {
-    char* out = NULL;
+unsigned char* request(char* msg_type, char* encoding_type) {
+    unsigned char* out = NULL;
     printf("encoding: %s | message: %s\n", encoding_type, msg_type);
     srand(time(NULL));
 
@@ -204,19 +204,22 @@ char* request(char* msg_type, char* encoding_type) {
     }
 
     const int buf_len = 32000;
-    char* buf = malloc(buf_len);
-    int enc = encode(its_msg, desc, ats, (uint8_t*)buf, buf_len);
+    unsigned char* buf = malloc(buf_len);
+    buf[0] = 0;
+    int enc = encode(its_msg, desc, ats, buf, buf_len);
 
-    if (to_hex) {
-        out = malloc(enc * 2 + 1);
-        sprintf(out, "0x");
-        for (int i = 0; i < enc; ++i) {
-            sprintf(out + 2 + i*2, "%02x", buf[i]);
+    if (enc) {
+        if (to_hex) {
+            out = malloc(enc * 2 + 2 + 1);
+            sprintf((char*)out, "0x");
+            for (int i = 0; i < enc; ++i) {
+                sprintf((char*)out + 2 + i*2, "%02x", buf[i]);
+            }
+            free(buf);  
+        } else {
+            out = buf;
         }
-        free(buf);  
-    } else {
-        out = buf;
-    }
+    } 
 
     ASN_STRUCT_FREE(*desc, its_msg);
     return out;
@@ -243,7 +246,7 @@ int main(int argc, char* argv[]) {
         exit(EXIT_FAILURE);
     }
 
-    char* res = request(msg_type, encoding_type);
+    unsigned char* res = request(msg_type, encoding_type);
     printf("message:\n%s\n", res);
     free(res);
 
