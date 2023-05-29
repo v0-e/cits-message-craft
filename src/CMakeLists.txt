@@ -1,0 +1,28 @@
+ADD_SUBDIRECTORY(asn1/cam)
+ADD_SUBDIRECTORY(asn1/denm)
+
+ADD_EXECUTABLE(cits-mc
+    craft.c
+)
+
+INCLUDE_DIRECTORIES(cits-mc
+    asn1
+)
+
+TARGET_LINK_LIBRARIES(cits-mc
+    asn1-cam
+    asn1-denm
+)
+
+SET_TARGET_PROPERTIES(cits-mc
+    PROPERTIES
+    RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}"
+)
+
+
+INSTALL(
+    TARGETS
+    cits-mc
+    RUNTIME DESTINATION bin
+)
+
