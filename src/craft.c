@@ -20,8 +20,8 @@ CAM_t* gen_cam() {
     asn_random_fill(&asn_DEF_CAM, (void**)&cam, 256);
     cam->header.messageID = 2;
     cam->header.protocolVersion = 2;
-    cam->cam.generationDeltaTime =  its_ts_get() % 65536;
-    cam->cam.camParameters.basicContainer.stationType = rand() % 16;
+    cam->cam.generationDeltaTime =  rand_range(0, 65535);
+    cam->cam.camParameters.basicContainer.stationType = rand_range(0, 15);
     cam->cam.camParameters.basicContainer.referencePosition.positionConfidenceEllipse.semiMajorConfidence = rand_range(0, 4095);
     cam->cam.camParameters.basicContainer.referencePosition.positionConfidenceEllipse.semiMinorConfidence = rand_range(0, 4095);
     cam->cam.camParameters.basicContainer.referencePosition.positionConfidenceEllipse.semiMajorOrientation = rand_range(0, 3601);
@@ -99,7 +99,7 @@ CAM_t* gen_cam() {
                 for (int i = 0; i < ph->list.count; ++i) {
                     ph->list.array[i]->pathPosition.deltaAltitude = rand_range(-12700, 12800);
                     if (ph->list.array[i]->pathDeltaTime) {
-                        *ph->list.array[i]->pathDeltaTime = (rand() % 65535) + 1;
+                        *ph->list.array[i]->pathDeltaTime = rand_range(1, 65535);
                     }
                 }
                 break;
@@ -122,7 +122,7 @@ CAM_t* gen_cam() {
                 break;
             case SpecialVehicleContainer_PR_roadWorksContainerBasic:
                 if (svc->choice.roadWorksContainerBasic.roadworksSubCauseCode) {
-                    *svc->choice.roadWorksContainerBasic.roadworksSubCauseCode = rand() % 7;
+                    *svc->choice.roadWorksContainerBasic.roadworksSubCauseCode = rand_range(0, 6);
                 }
                 break;
             case SpecialVehicleContainer_PR_rescueContainer:
@@ -156,11 +156,11 @@ DENM_t* gen_denm() {
     asn_random_fill(&asn_DEF_DENM, (void**)&denm, 256);
     denm->header.messageID = 1;
     denm->header.protocolVersion = 2;
-    denm->header.stationID = rand() % UINT32_MAX;
+    denm->header.stationID = rand_range(0, UINT32_MAX);
     uint64_t now = its_ts_get();
     asn_ulong2INTEGER(&denm->denm.management.detectionTime, now);
     asn_ulong2INTEGER(&denm->denm.management.referenceTime, now);
-    denm->denm.management.actionID.sequenceNumber = rand() % UINT16_MAX;
+    denm->denm.management.actionID.sequenceNumber = rand_range(0, UINT16_MAX);
     return denm;
 }
 
@@ -176,7 +176,6 @@ int encode(void* msg, asn_TYPE_descriptor_t* desc, enum asn_transfer_syntax ats,
 unsigned char* request(char* msg_type, char* encoding_type) {
     unsigned char* out = NULL;
     printf("encoding: %s | message: %s\n", encoding_type, msg_type);
-    srand(time(NULL));
 
     void* its_msg;
     asn_TYPE_descriptor_t* desc;
@@ -227,6 +226,7 @@ unsigned char* request(char* msg_type, char* encoding_type) {
 
 
 int main(int argc, char* argv[]) {
+    srand(time(NULL));
     int opt;
     char* msg_type = NULL;
     char* encoding_type = NULL;
