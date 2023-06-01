@@ -48,8 +48,12 @@ SEQUENCE_random_fill(const asn_TYPE_descriptor_t *td, void **sptr,
             memb_ptr2 = &memb_ptr;
         }
 
+        const asn_encoding_constraints_t* ec = &elm->encoding_constraints;
+        if (!ec->general_constraints)
+            ec = &elm->type->encoding_constraints;
+
         tmpres = elm->type->op->random_fill(
-            elm->type, memb_ptr2, &elm->encoding_constraints,
+            elm->type, memb_ptr2, ec,
             max_length > result_ok.length ? max_length - result_ok.length : 0);
         switch(tmpres.code) {
         case ARFILL_OK:
