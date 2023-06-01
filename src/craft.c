@@ -20,6 +20,8 @@ CAM_t* gen_cam() {
     asn_random_fill(&asn_DEF_CAM, (void**)&cam, 256);
     cam->header.messageID = 2;
     cam->header.protocolVersion = 2;
+    cam->header.stationID = rand_range(0, UINT32_MAX);
+    cam->cam.generationDeltaTime = its_ts_get() % 65536;
     return cam;
 }
 
@@ -32,7 +34,16 @@ DENM_t* gen_denm() {
     uint64_t now = its_ts_get();
     asn_ulong2INTEGER(&denm->denm.management.detectionTime, now);
     asn_ulong2INTEGER(&denm->denm.management.referenceTime, now);
-    denm->denm.management.actionID.sequenceNumber = rand_range(0, UINT16_MAX);
+
+    // TODO fix positionOfOccupants encoding
+    // TODO fix phoneNumber encoding
+    if (denm->denm.alacarte && 
+            denm->denm.alacarte->stationaryVehicle && 
+            denm->denm.alacarte->stationaryVehicle->carryingDangerousGoods &&
+            denm->denm.alacarte->stationaryVehicle->carryingDangerousGoods->phoneNumber) {
+        ASN_STRUCT_FREE(asn_DEF_PhoneNumber, denm->denm.alacarte->stationaryVehicle->carryingDangerousGoods->phoneNumber);
+        denm->denm.alacarte->stationaryVehicle->carryingDangerousGoods->phoneNumber = NULL;
+    }
     return denm;
 }
 
@@ -55,6 +66,9 @@ unsigned char* request(char* msg_type, char* encoding_type) {
     if (!strcmp(msg_type, "CAM") || !strcmp(msg_type, "cam")) {
         desc = &asn_DEF_CAM;
         its_msg = gen_cam();
+    } else if (!strcmp(msg_type, "DENM") || !strcmp(msg_type, "denm")) {
+        desc = &asn_DEF_DENM;
+        its_msg = gen_denm();
     } else {
         return NULL;
     }

@@ -2,42 +2,77 @@ set(CMAKE_C_FLAGS "-DASN_PDU_COLLECTION -I.")
 
 ADD_LIBRARY(asn1-cam STATIC
     AccelerationConfidence.c
+    AccelerationConfidence.h
     AccelerationControl.c
+    AccelerationControl.h
     AccidentSubCauseCode.c
+    AccidentSubCauseCode.h
     ActionID.c
+    ActionID.h
     AdverseWeatherCondition-AdhesionSubCauseCode.c
+    AdverseWeatherCondition-AdhesionSubCauseCode.h
     AdverseWeatherCondition-ExtremeWeatherConditionSubCauseCode.c
+    AdverseWeatherCondition-ExtremeWeatherConditionSubCauseCode.h
     AdverseWeatherCondition-PrecipitationSubCauseCode.c
+    AdverseWeatherCondition-PrecipitationSubCauseCode.h
     AdverseWeatherCondition-VisibilitySubCauseCode.c
+    AdverseWeatherCondition-VisibilitySubCauseCode.h
     Altitude.c
     AltitudeConfidence.c
+    AltitudeConfidence.h
+    Altitude.h
     AltitudeValue.c
+    AltitudeValue.h
     ANY_aper.c
     ANY_ber.c
     ANY.c
+    ANY.h
     ANY_jer.c
     ANY_uper.c
     ANY_xer.c
     aper_decoder.c
+    aper_decoder.h
     aper_encoder.c
+    aper_encoder.h
     aper_opentype.c
+    aper_opentype.h
     aper_support.c
+    aper_support.h
     asn_application.c
+    asn_application.h
     asn_bit_data.c
+    asn_bit_data.h
+    asn_codecs.h
     asn_codecs_prim_ber.c
     asn_codecs_prim.c
+    asn_codecs_prim.h
     asn_codecs_prim_xer.c
+    asn_config.h
+    asn_constant.h
     asn_internal.c
+    asn_internal.h
+    asn_ioc.h
     asn_random_fill.c
+    asn_random_fill.h
     asn_SEQUENCE_OF.c
+    asn_SEQUENCE_OF.h
     asn_SET_OF.c
+    asn_SET_OF.h
+    asn_system.h
     BasicContainer.c
+    BasicContainer.h
     BasicVehicleContainerHighFrequency.c
+    BasicVehicleContainerHighFrequency.h
     BasicVehicleContainerLowFrequency.c
+    BasicVehicleContainerLowFrequency.h
     ber_decoder.c
+    ber_decoder.h
     ber_tlv_length.c
+    ber_tlv_length.h
     ber_tlv_tag.c
+    ber_tlv_tag.h
     BIT_STRING.c
+    BIT_STRING.h
     BIT_STRING_jer.c
     BIT_STRING_oer.c
     BIT_STRING_print.c
@@ -47,6 +82,7 @@ ADD_LIBRARY(asn1-cam STATIC
     BOOLEAN_aper.c
     BOOLEAN_ber.c
     BOOLEAN.c
+    BOOLEAN.h
     BOOLEAN_jer.c
     BOOLEAN_oer.c
     BOOLEAN_print.c
@@ -54,18 +90,28 @@ ADD_LIBRARY(asn1-cam STATIC
     BOOLEAN_uper.c
     BOOLEAN_xer.c
     CAM.c
+    CAM.h
     CamParameters.c
+    CamParameters.h
     CauseCode.c
+    CauseCode.h
     CauseCodeType.c
+    CauseCodeType.h
     CenDsrcTollingZone.c
+    CenDsrcTollingZone.h
     CenDsrcTollingZoneID.c
+    CenDsrcTollingZoneID.h
     ClosedLanes.c
+    ClosedLanes.h
     CMakeLists.txt
     CollisionRiskSubCauseCode.c
+    CollisionRiskSubCauseCode.h
     constraints.c
+    constraints.h
     constr_CHOICE_aper.c
     constr_CHOICE_ber.c
     constr_CHOICE.c
+    constr_CHOICE.h
     constr_CHOICE_jer.c
     constr_CHOICE_oer.c
     constr_CHOICE_print.c
@@ -75,11 +121,13 @@ ADD_LIBRARY(asn1-cam STATIC
     constr_SEQUENCE_aper.c
     constr_SEQUENCE_ber.c
     constr_SEQUENCE.c
+    constr_SEQUENCE.h
     constr_SEQUENCE_jer.c
     constr_SEQUENCE_oer.c
     constr_SEQUENCE_OF_aper.c
     constr_SEQUENCE_OF_ber.c
     constr_SEQUENCE_OF.c
+    constr_SEQUENCE_OF.h
     constr_SEQUENCE_OF_jer.c
     constr_SEQUENCE_OF_uper.c
     constr_SEQUENCE_OF_xer.c
@@ -90,6 +138,7 @@ ADD_LIBRARY(asn1-cam STATIC
     constr_SET_OF_aper.c
     constr_SET_OF_ber.c
     constr_SET_OF.c
+    constr_SET_OF.h
     constr_SET_OF_jer.c
     constr_SET_OF_oer.c
     constr_SET_OF_print.c
@@ -97,52 +146,97 @@ ADD_LIBRARY(asn1-cam STATIC
     constr_SET_OF_uper.c
     constr_SET_OF_xer.c
     constr_TYPE.c
+    constr_TYPE.h
     CoopAwareness.c
+    CoopAwareness.h
     Curvature.c
     CurvatureCalculationMode.c
+    CurvatureCalculationMode.h
     CurvatureConfidence.c
+    CurvatureConfidence.h
+    Curvature.h
     CurvatureValue.c
+    CurvatureValue.h
     DangerousEndOfQueueSubCauseCode.c
+    DangerousEndOfQueueSubCauseCode.h
     DangerousGoodsBasic.c
+    DangerousGoodsBasic.h
     DangerousGoodsContainer.c
+    DangerousGoodsContainer.h
     DangerousGoodsExtended.c
+    DangerousGoodsExtended.h
     DangerousSituationSubCauseCode.c
+    DangerousSituationSubCauseCode.h
     DeltaAltitude.c
+    DeltaAltitude.h
     DeltaLatitude.c
+    DeltaLatitude.h
     DeltaLongitude.c
+    DeltaLongitude.h
     DeltaReferencePosition.c
+    DeltaReferencePosition.h
     der_encoder.c
+    der_encoder.h
     DigitalMap.c
+    DigitalMap.h
     DriveDirection.c
+    DriveDirection.h
     DrivingLaneStatus.c
+    DrivingLaneStatus.h
     EmbarkationStatus.c
+    EmbarkationStatus.h
     EmergencyContainer.c
+    EmergencyContainer.h
     EmergencyPriority.c
+    EmergencyPriority.h
     EmergencyVehicleApproachingSubCauseCode.c
+    EmergencyVehicleApproachingSubCauseCode.h
     EnergyStorageType.c
+    EnergyStorageType.h
     EventHistory.c
+    EventHistory.h
     EventPoint.c
+    EventPoint.h
     ExteriorLights.c
+    ExteriorLights.h
     EXTERNAL.c
+    EXTERNAL.h
     GenerationDeltaTime.c
+    GenerationDeltaTime.h
     GraphicString.c
+    GraphicString.h
     HardShoulderStatus.c
+    HardShoulderStatus.h
     HazardousLocation-AnimalOnTheRoadSubCauseCode.c
+    HazardousLocation-AnimalOnTheRoadSubCauseCode.h
     HazardousLocation-DangerousCurveSubCauseCode.c
+    HazardousLocation-DangerousCurveSubCauseCode.h
     HazardousLocation-ObstacleOnTheRoadSubCauseCode.c
+    HazardousLocation-ObstacleOnTheRoadSubCauseCode.h
     HazardousLocation-SurfaceConditionSubCauseCode.c
+    HazardousLocation-SurfaceConditionSubCauseCode.h
     Heading.c
     HeadingConfidence.c
+    HeadingConfidence.h
+    Heading.h
     HeadingValue.c
+    HeadingValue.h
     HeightLonCarr.c
+    HeightLonCarr.h
     HighFrequencyContainer.c
+    HighFrequencyContainer.h
     HumanPresenceOnTheRoadSubCauseCode.c
+    HumanPresenceOnTheRoadSubCauseCode.h
     HumanProblemSubCauseCode.c
+    HumanProblemSubCauseCode.h
     IA5String.c
+    IA5String.h
     InformationQuality.c
+    InformationQuality.h
     INTEGER_aper.c
     INTEGER_ber.c
     INTEGER.c
+    INTEGER.h
     INTEGER_jer.c
     INTEGER_oer.c
     INTEGER_print.c
@@ -150,19 +244,32 @@ ADD_LIBRARY(asn1-cam STATIC
     INTEGER_uper.c
     INTEGER_xer.c
     ItineraryPath.c
+    ItineraryPath.h
     ItsPduHeader.c
+    ItsPduHeader.h
     jer_encoder.c
+    jer_encoder.h
     LanePosition.c
+    LanePosition.h
     LateralAcceleration.c
+    LateralAcceleration.h
     LateralAccelerationValue.c
+    LateralAccelerationValue.h
     Latitude.c
+    Latitude.h
     LightBarSirenInUse.c
+    LightBarSirenInUse.h
     Longitude.c
+    Longitude.h
     LongitudinalAcceleration.c
+    LongitudinalAcceleration.h
     LongitudinalAccelerationValue.c
+    LongitudinalAccelerationValue.h
     LowFrequencyContainer.c
+    LowFrequencyContainer.h
     NativeEnumerated_aper.c
     NativeEnumerated.c
+    NativeEnumerated.h
     NativeEnumerated_jer.c
     NativeEnumerated_oer.c
     NativeEnumerated_uper.c
@@ -170,6 +277,7 @@ ADD_LIBRARY(asn1-cam STATIC
     NativeInteger_aper.c
     NativeInteger_ber.c
     NativeInteger.c
+    NativeInteger.h
     NativeInteger_jer.c
     NativeInteger_oer.c
     NativeInteger_print.c
@@ -177,9 +285,13 @@ ADD_LIBRARY(asn1-cam STATIC
     NativeInteger_uper.c
     NativeInteger_xer.c
     NumberOfOccupants.c
+    NumberOfOccupants.h
     NumericString.c
+    NumericString.h
     ObjectDescriptor.c
+    ObjectDescriptor.h
     OBJECT_IDENTIFIER.c
+    OBJECT_IDENTIFIER.h
     OBJECT_IDENTIFIER_jer.c
     OBJECT_IDENTIFIER_print.c
     OBJECT_IDENTIFIER_rfill.c
@@ -187,6 +299,7 @@ ADD_LIBRARY(asn1-cam STATIC
     OCTET_STRING_aper.c
     OCTET_STRING_ber.c
     OCTET_STRING.c
+    OCTET_STRING.h
     OCTET_STRING_jer.c
     OCTET_STRING_oer.c
     OCTET_STRING_print.c
@@ -194,109 +307,205 @@ ADD_LIBRARY(asn1-cam STATIC
     OCTET_STRING_uper.c
     OCTET_STRING_xer.c
     oer_decoder.c
+    oer_decoder.h
     oer_encoder.c
+    oer_encoder.h
     oer_support.c
+    oer_support.h
     OpeningDaysHours.c
+    OpeningDaysHours.h
     OPEN_TYPE_aper.c
     OPEN_TYPE_ber.c
     OPEN_TYPE.c
+    OPEN_TYPE.h
     OPEN_TYPE_oer.c
     OPEN_TYPE_uper.c
     OPEN_TYPE_xer.c
     PathDeltaTime.c
+    PathDeltaTime.h
     PathHistory.c
+    PathHistory.h
     PathPoint.c
+    PathPoint.h
     pdu_collection.c
     per_decoder.c
+    per_decoder.h
     per_encoder.c
+    per_encoder.h
     PerformanceClass.c
+    PerformanceClass.h
     per_opentype.c
+    per_opentype.h
     per_support.c
+    per_support.h
     PhoneNumber.c
+    PhoneNumber.h
     PosCentMass.c
+    PosCentMass.h
     PosConfidenceEllipse.c
+    PosConfidenceEllipse.h
     PosFrontAx.c
+    PosFrontAx.h
     PositioningSolutionType.c
+    PositioningSolutionType.h
     PositionOfOccupants.c
+    PositionOfOccupants.h
     PositionOfPillars.c
+    PositionOfPillars.h
     PosLonCarr.c
+    PosLonCarr.h
     PosPillar.c
+    PosPillar.h
     PostCrashSubCauseCode.c
+    PostCrashSubCauseCode.h
     ProtectedCommunicationZone.c
+    ProtectedCommunicationZone.h
     ProtectedCommunicationZonesRSU.c
+    ProtectedCommunicationZonesRSU.h
     ProtectedZoneID.c
+    ProtectedZoneID.h
     ProtectedZoneRadius.c
+    ProtectedZoneRadius.h
     ProtectedZoneType.c
+    ProtectedZoneType.h
     PtActivation.c
     PtActivationData.c
+    PtActivationData.h
+    PtActivation.h
     PtActivationType.c
+    PtActivationType.h
     PublicTransportContainer.c
+    PublicTransportContainer.h
     ReferencePosition.c
+    ReferencePosition.h
     RelevanceDistance.c
+    RelevanceDistance.h
     RelevanceTrafficDirection.c
+    RelevanceTrafficDirection.h
     RequestResponseIndication.c
+    RequestResponseIndication.h
     RescueAndRecoveryWorkInProgressSubCauseCode.c
+    RescueAndRecoveryWorkInProgressSubCauseCode.h
     RescueContainer.c
+    RescueContainer.h
     RestrictedTypes.c
+    RestrictedTypes.h
     RoadType.c
+    RoadType.h
     RoadWorksContainerBasic.c
+    RoadWorksContainerBasic.h
     RoadworksSubCauseCode.c
+    RoadworksSubCauseCode.h
     RSUContainerHighFrequency.c
+    RSUContainerHighFrequency.h
     SafetyCarContainer.c
+    SafetyCarContainer.h
     SemiAxisLength.c
+    SemiAxisLength.h
     SequenceNumber.c
+    SequenceNumber.h
     SignalViolationSubCauseCode.c
+    SignalViolationSubCauseCode.h
     SlowVehicleSubCauseCode.c
+    SlowVehicleSubCauseCode.h
     SpecialTransportContainer.c
+    SpecialTransportContainer.h
     SpecialTransportType.c
+    SpecialTransportType.h
     SpecialVehicleContainer.c
+    SpecialVehicleContainer.h
     Speed.c
     SpeedConfidence.c
+    SpeedConfidence.h
+    Speed.h
     SpeedLimit.c
+    SpeedLimit.h
     SpeedValue.c
+    SpeedValue.h
     StationarySince.c
+    StationarySince.h
     StationaryVehicleSubCauseCode.c
+    StationaryVehicleSubCauseCode.h
     StationID.c
+    StationID.h
     StationType.c
+    StationType.h
     SteeringWheelAngle.c
     SteeringWheelAngleConfidence.c
+    SteeringWheelAngleConfidence.h
+    SteeringWheelAngle.h
     SteeringWheelAngleValue.c
+    SteeringWheelAngleValue.h
     SubCauseCodeType.c
+    SubCauseCodeType.h
     Temperature.c
+    Temperature.h
     TimestampIts.c
+    TimestampIts.h
     Traces.c
+    Traces.h
     TrafficConditionSubCauseCode.c
+    TrafficConditionSubCauseCode.h
     TrafficRule.c
+    TrafficRule.h
     TransmissionInterval.c
+    TransmissionInterval.h
     TurningRadius.c
+    TurningRadius.h
     uper_decoder.c
+    uper_decoder.h
     uper_encoder.c
+    uper_encoder.h
     uper_opentype.c
+    uper_opentype.h
     uper_support.c
+    uper_support.h
     UTF8String.c
+    UTF8String.h
     UTF8String_print.c
     UTF8String_rfill.c
     ValidityDuration.c
+    ValidityDuration.h
     VDS.c
+    VDS.h
     VehicleBreakdownSubCauseCode.c
+    VehicleBreakdownSubCauseCode.h
     VehicleIdentification.c
+    VehicleIdentification.h
     VehicleLength.c
     VehicleLengthConfidenceIndication.c
+    VehicleLengthConfidenceIndication.h
+    VehicleLength.h
     VehicleLengthValue.c
+    VehicleLengthValue.h
     VehicleMass.c
+    VehicleMass.h
     VehicleRole.c
+    VehicleRole.h
     VehicleWidth.c
+    VehicleWidth.h
     VerticalAcceleration.c
+    VerticalAcceleration.h
     VerticalAccelerationValue.c
+    VerticalAccelerationValue.h
     WheelBaseVehicle.c
+    WheelBaseVehicle.h
     WMInumber.c
+    WMInumber.h
     WrongWayDrivingSubCauseCode.c
+    WrongWayDrivingSubCauseCode.h
     xer_decoder.c
+    xer_decoder.h
     xer_encoder.c
+    xer_encoder.h
     xer_support.c
+    xer_support.h
     YawRate.c
     YawRateConfidence.c
+    YawRateConfidence.h
+    YawRate.h
     YawRateValue.c
+    YawRateValue.h
     )
 
 TARGET_INCLUDE_DIRECTORIES(asn1-cam PUBLIC .)

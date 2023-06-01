@@ -14,7 +14,7 @@ OCTET_STRING_encode_jer(const asn_TYPE_descriptor_t *td, const void *sptr,
     const char * const h2c = "0123456789ABCDEF";
     const OCTET_STRING_t *st = (const OCTET_STRING_t *)sptr;
     asn_enc_rval_t er = { 0, 0, 0 };
-    char scratch[16 * 3 + 4];
+    char scratch[256 * 3 + 4];
     char *p = scratch;
     uint8_t *buf;
     uint8_t *end;
@@ -31,7 +31,7 @@ OCTET_STRING_encode_jer(const asn_TYPE_descriptor_t *td, const void *sptr,
     buf = st->buf;
     end = buf + st->size;
     for(i = 0; buf < end; buf++, i++) {
-      if(!(i % 16) && (i || st->size > 16)) {
+      if(!(i % 256) && (i || st->size > 256)) {
         ASN__CALLBACK(scratch, p-scratch);
         p = scratch;
         ASN__TEXT_INDENT(1, ilevel);
@@ -43,7 +43,7 @@ OCTET_STRING_encode_jer(const asn_TYPE_descriptor_t *td, const void *sptr,
     if(p - scratch) {
       p--;  /* Remove the tail space */
       ASN__CALLBACK3("\"", 1, scratch, p-scratch, "\"", 1);  /* Dump the rest */
-      if(st->size > 16)
+      if(st->size > 256)
         ASN__TEXT_INDENT(1, ilevel-1);
     }
 
@@ -112,6 +112,7 @@ OCTET_STRING_encode_jer_utf8(const asn_TYPE_descriptor_t *td, const void *sptr,
     const OCTET_STRING_t *st = (const OCTET_STRING_t *)sptr;
     asn_enc_rval_t er = { 0, 0, 0 };
     uint8_t *buf, *end;
+    uint8_t quote = '"';
     uint8_t *ss;  /* Sequence start */
     ssize_t encoded_len = 0;
 
@@ -123,6 +124,8 @@ OCTET_STRING_encode_jer_utf8(const asn_TYPE_descriptor_t *td, const void *sptr,
 
     buf = st->buf;
     end = buf + st->size;
+    cb(&quote, 1, app_key); 
+    encoded_len++;
     for(ss = buf; buf < end; buf++) {
         unsigned int ch = *buf;
         int s_len;	/* Special encoding sequence length */
@@ -144,6 +147,9 @@ OCTET_STRING_encode_jer_utf8(const asn_TYPE_descriptor_t *td, const void *sptr,
     encoded_len += (buf - ss);
     if((buf - ss) && cb(ss, buf - ss, app_key) < 0)
         ASN__ENCODE_FAILED;
+
+    cb(&quote, 1, app_key); 
+    encoded_len++;
 
     er.encoded = encoded_len;
     ASN__ENCODED_OK(er);

@@ -116,7 +116,7 @@ struct asn_TYPE_descriptor_s *asn_pdu_collection[] = {
 	&asn_DEF_EventHistory,	
 	&asn_DEF_DigitalMap,	
 	&asn_DEF_OpeningDaysHours,	
-	/* From module ASN1C-UsefulInformationObjectClasses in /usr/local/share/asn1c/standard-modules/ASN1C-UsefulInformationObjectClasses.asn1 */
+	/* From module ASN1C-UsefulInformationObjectClasses in /home/v0/it2s/it2s-asn/skeletons/standard-modules/ASN1C-UsefulInformationObjectClasses.asn1 */
 	&asn_DEF_EXTERNAL,	
 	0
 };

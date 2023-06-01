@@ -131,8 +131,13 @@ SET_OF_random_fill(const asn_TYPE_descriptor_t *td, void **sptr,
     for(; rnd_len > 0; rnd_len--) {
         asn_anonymous_set_ *list = _A_SET_FROM_VOID(st);
         void *ptr = 0;
+        const asn_encoding_constraints_t* memb_ec;
+        memb_ec = &elm->encoding_constraints;
+        if (!memb_ec->general_constraints)
+            memb_ec = &elm->type->encoding_constraints;
+
         asn_random_fill_result_t tmpres = elm->type->op->random_fill(
-            elm->type, &ptr, &elm->encoding_constraints,
+            elm->type, &ptr, memb_ec,
             (max_length > res_ok.length ? max_length - res_ok.length : 0)
                 / rnd_len);
         switch(tmpres.code) {

@@ -20,6 +20,7 @@ CHOICE_random_fill(const asn_TYPE_descriptor_t *td, void **sptr,
     void *memb_ptr;    /* Pointer to the member */
     void **memb_ptr2;  /* Pointer to that pointer */
     void *st = *sptr;
+    const asn_encoding_constraints_t* memb_ec;
 
     if(max_length == 0) return result_skipped;
 
@@ -43,8 +44,12 @@ CHOICE_random_fill(const asn_TYPE_descriptor_t *td, void **sptr,
         memb_ptr2 = &memb_ptr;
     }
 
+    memb_ec = &elm->encoding_constraints;
+    if (!memb_ec->general_constraints)
+        memb_ec = &elm->type->encoding_constraints;
+
     res = elm->type->op->random_fill(elm->type, memb_ptr2,
-                                    &elm->encoding_constraints, max_length);
+                                    memb_ec, max_length);
     _set_present_idx(st, specs->pres_offset, specs->pres_size, present);
     if(res.code == ARFILL_OK) {
         *sptr = st;

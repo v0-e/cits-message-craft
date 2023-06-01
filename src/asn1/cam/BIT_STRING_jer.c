@@ -20,7 +20,7 @@ BIT_STRING_encode_jer(const asn_TYPE_descriptor_t *td, const void *sptr,
     char *p = scratch;
     char *scend = scratch + (sizeof(scratch) - 10);
     const BIT_STRING_t *st = (const BIT_STRING_t *)sptr;
-    int xcan = 0;
+    int xcan = 1;
     uint8_t *buf;
     uint8_t *end;
 
@@ -35,6 +35,7 @@ BIT_STRING_encode_jer(const asn_TYPE_descriptor_t *td, const void *sptr,
     /*
      * Binary dump
      */
+    *p++ = '"';
     for(; buf < end; buf++) {
         int v = *buf;
         int nline = xcan?0:(((buf - st->buf) % 8) == 0);
@@ -59,6 +60,7 @@ BIT_STRING_encode_jer(const asn_TYPE_descriptor_t *td, const void *sptr,
         int i;
         for(i = 7; i >= ubits; i--)
             *p++ = (v & (1 << i)) ? 0x31 : 0x30;
+        *p++ = '"';
         ASN__CALLBACK(scratch, p - scratch);
     }
 

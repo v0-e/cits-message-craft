@@ -34,6 +34,7 @@ SEQUENCE_random_fill(const asn_TYPE_descriptor_t *td, void **sptr,
         void *memb_ptr;    /* Pointer to the member */
         void **memb_ptr2;  /* Pointer to that pointer */
         asn_random_fill_result_t tmpres;
+        const asn_encoding_constraints_t* memb_ec;
 
         if(elm->optional && asn_random_between(0, 4) == 2) {
             /* Sometimes decide not to fill the optional value */
@@ -48,12 +49,12 @@ SEQUENCE_random_fill(const asn_TYPE_descriptor_t *td, void **sptr,
             memb_ptr2 = &memb_ptr;
         }
 
-        const asn_encoding_constraints_t* ec = &elm->encoding_constraints;
-        if (!ec->general_constraints)
-            ec = &elm->type->encoding_constraints;
+        memb_ec = &elm->encoding_constraints;
+        if (!memb_ec->general_constraints)
+            memb_ec = &elm->type->encoding_constraints;
 
         tmpres = elm->type->op->random_fill(
-            elm->type, memb_ptr2, ec,
+            elm->type, memb_ptr2, memb_ec,
             max_length > result_ok.length ? max_length - result_ok.length : 0);
         switch(tmpres.code) {
         case ARFILL_OK:
