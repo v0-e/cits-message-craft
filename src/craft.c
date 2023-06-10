@@ -80,6 +80,12 @@ unsigned char* request(char* msg_type, char* encoding_type) {
     } else if (!strcmp(encoding_type, "uper")) {
         ats = ATS_UNALIGNED_CANONICAL_PER;
         to_hex = 1;
+    } else if (!strcmp(encoding_type, "ber")) {
+        ats = ATS_BER;
+        to_hex = 1;
+    } else if (!strcmp(encoding_type, "der")) {
+        ats = ATS_DER;
+        to_hex = 1;
     } else if (!strcmp(encoding_type, "xml")) {
         ats = ATS_BASIC_XER;
     } else if (!strcmp(encoding_type, "json")) {
