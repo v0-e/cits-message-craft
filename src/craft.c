@@ -2,18 +2,8 @@
 #include "denm/DENM.h"
 #include <time.h>
 #include <unistd.h>
-#include <argp.h>
+#include <getopt.h>
 #include <stdbool.h>
-
-const char *argp_program_version = "cits-mc 0.1";
-const char *argp_program_bug_address = "xyz.vieira@gmail.com";
-static char doc[] = "C-ITS random message generator";
-static struct argp_option options[] = { 
-    { "type",         'm', "TYPE",       0,                   "Message type"},
-    { "encoding",     'e', "ENCODING",   0,                   "Message encoding"},
-    { "station-id",   1,   "ID",         OPTION_ARG_OPTIONAL, "Station ID"},
-    { 0 } 
-};
 
 struct fields {
     int32_t station_id;
@@ -25,29 +15,6 @@ struct arguments {
     char* type;
     struct fields fields;
 };
-
-static error_t parse_opt(int key, char* arg, struct argp_state* state) {
-    struct arguments *arguments = state->input;
-    switch (key) {
-        case 'm': 
-            arguments->type = arg; 
-            break;
-        case 'e': 
-            arguments->encoding = arg; 
-            break;
-        case 1: 
-            arguments->fields.station_id = atoi(arg); 
-            arguments->fields.station_id_set = true; 
-            break;
-        case ARGP_KEY_ARG: 
-            return 0;
-        default: 
-            return ARGP_ERR_UNKNOWN;
-    }   
-    return 0;
-}
-
-static struct argp argp = { options, parse_opt, NULL, doc, 0, 0, 0 };
 
 uint64_t its_ts_get() {
     struct timespec systemtime;
@@ -119,39 +86,39 @@ int encode(void* msg, asn_TYPE_descriptor_t* desc, enum asn_transfer_syntax ats,
     return enc.encoded;
 }
 
-unsigned char* request(struct arguments* arguments) {
+unsigned char* request(struct arguments* args) {
     unsigned char* out = NULL;
-    printf("encoding: %s | message: %s\n", arguments->encoding, arguments->type);
+    printf("encoding: %s | message: %s\n", args->encoding, args->type);
 
     void* its_msg;
     asn_TYPE_descriptor_t* desc;
     enum asn_transfer_syntax ats;
-    if (!strcmp(arguments->type, "CAM") || !strcmp(arguments->type, "cam")) {
+    if (!strcmp(args->type, "CAM") || !strcmp(args->type, "cam")) {
         desc = &asn_DEF_CAM;
-        its_msg = gen_cam(&arguments->fields);
-    } else if (!strcmp(arguments->type, "DENM") || !strcmp(arguments->type, "denm")) {
+        its_msg = gen_cam(&args->fields);
+    } else if (!strcmp(args->type, "DENM") || !strcmp(args->type, "denm")) {
         desc = &asn_DEF_DENM;
-        its_msg = gen_denm(&arguments->fields);
+        its_msg = gen_denm(&args->fields);
     } else {
         return NULL;
     }
 
     int to_hex = 0;
-    if (!strcmp(arguments->encoding, "oer")) {
+    if (!strcmp(args->encoding, "oer")) {
         ats = ATS_CANONICAL_OER;
         to_hex = 1;
-    } else if (!strcmp(arguments->encoding, "uper")) {
+    } else if (!strcmp(args->encoding, "uper")) {
         ats = ATS_UNALIGNED_CANONICAL_PER;
         to_hex = 1;
-    } else if (!strcmp(arguments->encoding, "ber")) {
+    } else if (!strcmp(args->encoding, "ber")) {
         ats = ATS_BER;
         to_hex = 1;
-    } else if (!strcmp(arguments->encoding, "der")) {
+    } else if (!strcmp(args->encoding, "der")) {
         ats = ATS_DER;
         to_hex = 1;
-    } else if (!strcmp(arguments->encoding, "xml")) {
+    } else if (!strcmp(args->encoding, "xml")) {
         ats = ATS_BASIC_XER;
-    } else if (!strcmp(arguments->encoding, "json")) {
+    } else if (!strcmp(args->encoding, "json")) {
         ats = ATS_JER;
     } else {
         return NULL;
@@ -179,15 +146,58 @@ unsigned char* request(struct arguments* arguments) {
     return out;
 }
 
+static struct option long_options[] =
+{
+    {"help",     no_argument,       0, 'h'},
+    {"type",     required_argument, 0, 'm'},
+    {"encoding", required_argument, 0, 'e'},
+    {"station-id", required_argument, 0, 1},
+    {0, 0, 0, 0}
+};
 
 int main(int argc, char* argv[]) {
     srand(time(NULL));
 
-    struct arguments arguments = {0};
+    struct arguments args = {0};
+    int c;
+    int option_index = 0;
+    while ((c = getopt_long(argc, argv, "hm:e:",
+                long_options, &option_index)) != -1) {
 
-    argp_parse(&argp, argc, argv, 0, 0, &arguments);
+        switch (c) {
+            case 0:
+                if (long_options[option_index].flag != 0)
+                    break;
+                printf ("\n");
+                break;
 
-    unsigned char* res = request(&arguments);
+            case 'h':
+                printf("Usage: %s -m message-type -e encoding\n",
+                        argv[0]);
+                return 0;
+
+            case 'm':
+                args.type = optarg;
+                break;
+
+            case 'e':
+                args.encoding = optarg;
+                break;
+
+            case 1:
+                args.fields.station_id = atoi(optarg);
+                args.fields.station_id_set = true;
+                break;
+
+            case '?':
+                break;
+
+            default:
+                abort();
+        }
+    }
+
+    unsigned char* res = request(&args);
     printf("message:\n%s\n", res);
     free(res);
 
