@@ -1,5 +1,5 @@
 # C-ITS Message Craft
-Random C-ITS message generator.
+C-ITS message converter and random generator.
 Based on [vlm/asn1c](https://github.com/vlm/asn1c) - [mouse07410's fork](https://github.com/mouse07410/asn1c).
 
 Currently supported types:
@@ -18,7 +18,8 @@ Currently supported encodings:
 Using CMake/Make: `mkdir build && cd build && cmake .. && make`. Can then be installed with: `sudo make install`.
 
 ## Usage
-Run `cits-mc -m msg-type -e encoding-type`.
+Converter: run `cits-mc conv -i in-encoding -o out-encoding -m message`. JSON->* conversion currently not supported.
+Generator: run `cits-mc gen -t message-type -e out-encoding`. Optional fields: `--station-id=INTEGER`.
 
 ## Playground
 A WebAssembly version of this application can be tested out in [craft.v0-e.cc](https://craft.v0-e.cc).
