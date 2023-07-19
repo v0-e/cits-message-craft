@@ -18,9 +18,15 @@ Currently supported encodings:
 Using CMake/Make: `mkdir build && cd build && cmake .. && make`. Can then be installed with: `sudo make install`.
 
 ## Usage
-Converter: run `cits-mc conv -i in-encoding -o out-encoding -m message`. JSON->* conversion currently not supported.
+### Converter
+Run `cits-mc conv -i in-encoding -o out-encoding -m message`. JSON->* conversion currently not supported.
 
-Generator: run `cits-mc gen -t message-type -e out-encoding`. Optional fields: `--station-id=INTEGER`.
+### Generator
+Run `cits-mc gen -t message-type -e out-encoding`. 
+Optional fields: 
+- `--station-id=INTEGER` 
+- `--latitude=REAL` 
+- `--longitude=REAL`
 
 ## Playground
-A WebAssembly version of this application can be tested out in [craft.v0-e.cc](https://craft.v0-e.com).
+A WebAssembly version of this application can be tested out in [craft.v0-e.com](https://craft.v0-e.com).

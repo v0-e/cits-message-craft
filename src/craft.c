@@ -16,6 +16,11 @@ enum MODE {
 struct msg_fields {
     int32_t station_id;
     bool station_id_set;
+
+    double latitude;
+    bool latitude_set;
+    double longitude;
+    bool longitude_set;
 };
 
 struct generator_args {
@@ -55,6 +60,13 @@ CAM_t* gen_cam(struct msg_fields* fields) {
         if (fields->station_id_set) {
             cam->header.stationID = fields->station_id;
         }
+
+        if (fields->latitude_set) {
+            cam->cam.camParameters.basicContainer.referencePosition.latitude = (int32_t)(fields->latitude*10e6);
+        }
+        if (fields->longitude_set) {
+            cam->cam.camParameters.basicContainer.referencePosition.longitude = (int32_t)(fields->longitude*10e6);
+        }
     }
     return cam;
 }
@@ -85,6 +97,14 @@ DENM_t* gen_denm(struct msg_fields* fields) {
     if (fields) {
         if (fields->station_id_set) {
             denm->header.stationID = fields->station_id;
+            denm->denm.management.actionID.originatingStationID = fields->station_id;
+        }
+
+        if (fields->latitude_set) {
+            denm->denm.management.eventPosition.latitude = (int32_t)(fields->latitude*10e6);
+        }
+        if (fields->longitude_set) {
+            denm->denm.management.eventPosition.longitude = (int32_t)(fields->longitude*10e6);
         }
     }
 
@@ -181,6 +201,7 @@ int bin2hex(uint8_t* bin, size_t bin_len, char* hex) {
     for (int i = 0; i < bin_len; ++i) {
         sprintf((char*)hex + 2 + i*2, "%02x", bin[i]);
     }
+    return strlen(hex);
 }
 
 unsigned char* conv(struct converter_args* args) {
@@ -343,6 +364,8 @@ static struct option generator_long_options[] =
     {"type",     required_argument, 0, 'm'},
     {"encoding", required_argument, 0, 'e'},
     {"station-id", required_argument, 0, 1},
+    {"latitude", required_argument, 0, 2},
+    {"longitude", required_argument, 0, 3},
     {0, 0, 0, 0}
 };
 
@@ -413,6 +436,16 @@ int main(int argc, char* argv[]) {
                     case 1:
                         g_args.fields.station_id = atoi(optarg);
                         g_args.fields.station_id_set = true;
+                        break;
+
+                    case 2:
+                        g_args.fields.latitude = strtod(optarg, NULL);
+                        g_args.fields.latitude_set = true;
+                        break;
+
+                    case 3:
+                        g_args.fields.longitude = strtod(optarg, NULL);
+                        g_args.fields.longitude_set = true;
                         break;
 
                     case '?':
