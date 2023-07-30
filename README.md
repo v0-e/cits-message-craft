@@ -27,6 +27,10 @@ Optional fields:
 - `--station-id=INTEGER` 
 - `--latitude=REAL` 
 - `--longitude=REAL`
+- `--altitude=REAL`
+- `--station-type=INTEGER`
+- `--cause-code=INTEGER`
+- `--sub-cause-code=INTEGER`
 
 ## Playground
 A WebAssembly version of this application can be tested out in [craft.v0-e.com](https://craft.v0-e.com).

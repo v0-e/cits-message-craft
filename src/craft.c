@@ -17,10 +17,20 @@ struct msg_fields {
     int32_t station_id;
     bool station_id_set;
 
+    uint8_t station_type;
+    bool station_type_set;
+
     double latitude;
     bool latitude_set;
     double longitude;
     bool longitude_set;
+    double altitude;
+    bool altitude_set;
+
+    uint8_t cause_code;
+    bool cause_code_set;
+    uint8_t sub_cause_code;
+    bool sub_cause_code_set;
 };
 
 struct generator_args {
@@ -67,6 +77,45 @@ CAM_t* gen_cam(struct msg_fields* fields) {
         if (fields->longitude_set) {
             cam->cam.camParameters.basicContainer.referencePosition.longitude = (int32_t)(fields->longitude*10e6);
         }
+        if (fields->altitude_set) {
+            cam->cam.camParameters.basicContainer.referencePosition.altitude.altitudeValue = (int32_t)(fields->altitude*100);
+            cam->cam.camParameters.basicContainer.referencePosition.altitude.altitudeConfidence = 0;
+        }
+
+        if (fields->station_type_set) {
+            cam->cam.camParameters.basicContainer.stationType = fields->station_type;
+
+            switch (cam->cam.camParameters.highFrequencyContainer.present) {
+                case HighFrequencyContainer_PR_basicVehicleContainerHighFrequency:
+                    if (fields->station_type == 15) {
+                        ASN_STRUCT_FREE_CONTENTS_ONLY(asn_DEF_BasicVehicleContainerHighFrequency, &cam->cam.camParameters.highFrequencyContainer.choice.basicVehicleContainerHighFrequency);
+                        memset(&cam->cam.camParameters.highFrequencyContainer.choice.basicVehicleContainerHighFrequency, 0, sizeof(BasicVehicleContainerHighFrequency_t));
+                        asn_random_fill(&asn_DEF_RSUContainerHighFrequency, (void**)&cam->cam.camParameters.highFrequencyContainer.choice.rsuContainerHighFrequency, 64);
+                        cam->cam.camParameters.highFrequencyContainer.present = HighFrequencyContainer_PR_rsuContainerHighFrequency;
+                        RSUContainerHighFrequency_t* rchf = NULL;
+                        asn_random_fill(&asn_DEF_RSUContainerHighFrequency, (void**)&rchf, 64);
+                        cam->cam.camParameters.highFrequencyContainer.choice.rsuContainerHighFrequency = *rchf;
+                    }
+                    break;
+                case HighFrequencyContainer_PR_rsuContainerHighFrequency:
+                    if (fields->station_type != 15) {
+                        ASN_STRUCT_FREE_CONTENTS_ONLY(asn_DEF_RSUContainerHighFrequency, &cam->cam.camParameters.highFrequencyContainer.choice.rsuContainerHighFrequency);
+                        memset(&cam->cam.camParameters.highFrequencyContainer.choice.rsuContainerHighFrequency, 0, sizeof(RSUContainerHighFrequency_t));
+                        cam->cam.camParameters.highFrequencyContainer.present = HighFrequencyContainer_PR_basicVehicleContainerHighFrequency;
+                        BasicVehicleContainerHighFrequency_t* bvchf = NULL;
+                        asn_random_fill(&asn_DEF_BasicVehicleContainerHighFrequency, (void**)&bvchf, 64);
+                        cam->cam.camParameters.highFrequencyContainer.choice.basicVehicleContainerHighFrequency = *bvchf;
+                    }
+                    break;
+            }
+
+        }
+
+    }
+
+    if (cam->cam.camParameters.basicContainer.stationType == 15 && cam->cam.camParameters.lowFrequencyContainer) {
+        ASN_STRUCT_FREE(asn_DEF_LowFrequencyContainer, cam->cam.camParameters.lowFrequencyContainer);
+        cam->cam.camParameters.lowFrequencyContainer = NULL;
     }
     return cam;
 }
@@ -105,6 +154,27 @@ DENM_t* gen_denm(struct msg_fields* fields) {
         }
         if (fields->longitude_set) {
             denm->denm.management.eventPosition.longitude = (int32_t)(fields->longitude*10e6);
+        }
+        if (fields->altitude_set) {
+            denm->denm.management.eventPosition.altitude.altitudeValue = (int32_t)(fields->altitude*100);
+            denm->denm.management.eventPosition.altitude.altitudeConfidence = 0;
+        }
+
+        if (fields->station_type_set) {
+            denm->denm.management.stationType = fields->station_type;
+        }
+
+        if (fields->cause_code_set || fields->sub_cause_code_set) {
+            if (!denm->denm.situation) {
+                denm->denm.situation = calloc(1, sizeof(SituationContainer_t));
+            }
+            denm->denm.situation->informationQuality = 0;
+            if (fields->cause_code_set) {
+                denm->denm.situation->eventType.causeCode = fields->cause_code;
+            }
+            if (fields->sub_cause_code_set) {
+                denm->denm.situation->eventType.subCauseCode = fields->sub_cause_code;
+            }
         }
     }
 
@@ -366,6 +436,10 @@ static struct option generator_long_options[] =
     {"station-id", required_argument, 0, 1},
     {"latitude", required_argument, 0, 2},
     {"longitude", required_argument, 0, 3},
+    {"altitude", required_argument, 0, 4},
+    {"station-type", required_argument, 0, 5},
+    {"cause-code", required_argument, 0, 6},
+    {"sub-cause-code", required_argument, 0, 7},
     {0, 0, 0, 0}
 };
 
@@ -446,6 +520,26 @@ int main(int argc, char* argv[]) {
                     case 3:
                         g_args.fields.longitude = strtod(optarg, NULL);
                         g_args.fields.longitude_set = true;
+                        break;
+
+                    case 4:
+                        g_args.fields.altitude = strtod(optarg, NULL);
+                        g_args.fields.altitude_set = true;
+                        break;
+
+                    case 5:
+                        g_args.fields.station_type = atoi(optarg);
+                        g_args.fields.station_type_set = true;
+                        break;
+
+                    case 6:
+                        g_args.fields.cause_code = atoi(optarg);
+                        g_args.fields.cause_code_set = true;
+                        break;
+
+                    case 7:
+                        g_args.fields.sub_cause_code = atoi(optarg);
+                        g_args.fields.sub_cause_code_set = true;
                         break;
 
                     case '?':
